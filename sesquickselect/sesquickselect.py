@@ -54,7 +54,7 @@ def sesquickselect(arr, k, nu):
             return arr[left]
 
         scanned_elements[0] += right - left + 1  # Increment number of scanned elements
-        #print(arr)
+        #print(arr) helps us to see if we are modifying correctly the array
         i = left + random.randint(0, right - left)  # length of the subarray - 1
         pivot1 = arr[i]
 
