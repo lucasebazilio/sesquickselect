@@ -76,6 +76,13 @@ def sesquickselect(arr, k, nu):
             small, large = partition(arr, left, right, pivot) # If α > 1 − ν then we partition the array around the largest of the two pivots
         else:
             small, large = dualpivot_partition(arr, left, right, pivot1, pivot2) # If ν ≤ α ≤ 1 − ν we partition around the two pivots using Yaroslavskiy-BentleyBloch (YBB) dual-pivot partitioning
+            if k < small:
+                return sesquick(left, small - 1, k)
+            elif k <= large:
+                return sesquick(small, large, k)
+            else:
+                return sesquick(large + 1, right, k)
+
             #print("small:",small)
             #print("large:",large)
             #scanned_elements[0] += (large-small+1)  # Increment number of scanned elements for YBB
@@ -99,8 +106,8 @@ def sesquickselect(arr, k, nu):
 
 # Example usage:
 arr = [3, 6, 2, 9, 1, 5, 7, 8, 4]
-k = 5
-nu = 0.3
+k = 3
+nu = 0.2
 
 result, scanned_count = sesquickselect(arr, k, nu)
 print(f"The {k + 1}th smallest element is: {result}")
