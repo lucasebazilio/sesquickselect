@@ -54,7 +54,7 @@ def sesquickselect(arr, k, nu):
             return arr[left]
 
         scanned_elements[0] += right - left + 1  # Increment number of scanned elements
-        print(arr)
+        #print(arr)
         i = left + random.randint(0, right - left)  # length of the subarray - 1
         pivot1 = arr[i]
 
@@ -73,14 +73,14 @@ def sesquickselect(arr, k, nu):
 
         if alpha < nu:
             pivot = pivot1
-            print("part1")
+            #print("part1") # indicates we use partition with pivot1
             small, large = partition(arr, left, right, pivot) # If α < ν we partition the array around the smallest of the two pivots
         elif alpha > 1 - nu:
-            pivot = pivot2
-            print("part2")
+            pivot = pivot2 
+            #print("part2") # indicates we use partition with pivot2
             small, large = partition(arr, left, right, pivot) # If α > 1 − ν then we partition the array around the largest of the two pivots
         else:
-            print("dual")
+            #print("dual") # indicates we use dual pivot partition
             small, large = dualpivot_partition(arr, left, right, i,j) # If ν ≤ α ≤ 1 − ν we partition around the two pivots using Yaroslavskiy-BentleyBloch (YBB) dual-pivot partitioning
 
 
