@@ -1,31 +1,38 @@
 import random
 
-def dualpivot_partition(arr, left, right, i, j):
-    if right - left >= 1:
-        k = left + 1
-        l = k
-        g = right - 1
-        while k <= g:
-            if arr[k] < arr[i]:
-                arr[k], arr[l] = arr[l], arr[k]
-                l += 1
-            elif arr[k] > arr[j]:
-                while arr[g] > arr[j] and k < g:
-                    g -= 1
-                arr[k], arr[g] = arr[g], arr[k]
-                g -= 1
-                if arr[k] < arr[i]:
-                    arr[k], arr[l] = arr[l], arr[k]
-                    l += 1
-            k +=1
-        l -= 1
-        g += 1
-        arr[i], arr[l] = arr[l], arr[i]
-        arr[j], arr[g] = arr[g], arr[j]
+def dualpivot_partition(arr, low, high, left_pivot_index, right_pivot_index):
+    left_pivot = arr[left_pivot_index]
+    right_pivot = arr[right_pivot_index]
 
-        return l, g  # Return the indices indicating the boundaries of the partitions
-    else:
-        return left, right  # If the size is less than 1, return the same indices
+    i = low
+    left = low
+    right = high
+
+    while i <= right:
+        if arr[i] < left_pivot:
+            arr[i], arr[left] = arr[left], arr[i]
+            left += 1
+            i += 1
+        elif arr[i] > right_pivot:
+            arr[i], arr[right] = arr[right], arr[i]
+            right -= 1
+        else:
+            i += 1
+
+    i = left
+    while i < right:
+        if arr[i] == left_pivot:
+            arr[i], arr[left] = arr[left], arr[i]
+            left += 1
+            i += 1
+        elif arr[i] == right_pivot:
+            arr[i], arr[right] = arr[right], arr[i]
+            right -= 1
+        else:
+            i += 1
+
+    return left - 1, right + 1
+
 
 def partition(arr, left, right, pivot):
     smaller = left
@@ -53,8 +60,9 @@ def sesquickselect(arr, k, nu):
         if left == right:
             return arr[left]
 
+        #print("begin:",arr)
         scanned_elements[0] += right - left + 1  # Increment number of scanned elements
-        #print(arr) helps us to see if we are modifying correctly the array
+
         i = left + random.randint(0, right - left)  # length of the subarray - 1
         pivot1 = arr[i]
 
@@ -65,24 +73,49 @@ def sesquickselect(arr, k, nu):
         alpha = k / (right - left + 1)
 
         pivot1, pivot2 = min(pivot1, pivot2), max(pivot1, pivot2)
-
         i = arr.index(pivot1)
-        j = arr.index(pivot2) 
+        j = arr.index(pivot2)
+
+        #print("pivot1:",pivot1)
+        #print("pivot2:",pivot2)
 
 
 
         if alpha < nu:
             pivot = pivot1
-            #print("part1") # indicates we use partition with pivot1
+            
             small, large = partition(arr, left, right, pivot) # If α < ν we partition the array around the smallest of the two pivots
-        elif alpha > 1 - nu:
-            pivot = pivot2 
-            #print("part2") # indicates we use partition with pivot2
-            small, large = partition(arr, left, right, pivot) # If α > 1 − ν then we partition the array around the largest of the two pivots
-        else:
-            #print("dual") # indicates we use dual pivot partition
-            small, large = dualpivot_partition(arr, left, right, i,j) # If ν ≤ α ≤ 1 − ν we partition around the two pivots using Yaroslavskiy-BentleyBloch (YBB) dual-pivot partitioning
+            #print("part1")
 
+            if small <= k <= large:
+              return arr[k]
+            elif k < small:
+              return sesquick(left, small - 1, k)
+            else:
+              return sesquick(large + 1, right, k)
+
+        elif alpha > 1 - nu:
+            pivot = pivot2
+            
+            small, large = partition(arr, left, right, pivot) # If α > 1 − ν then we partition the array around the largest of the two pivots
+            #print("part2")
+
+            if small <= k <= large:
+                return arr[k]
+            elif k < small:
+               return sesquick(left, small - 1, k)
+            else:
+              return sesquick(large + 1, right, k)
+
+        else:
+            small, large = dualpivot_partition(arr, left, right, i,j) # If ν ≤ α ≤ 1 − ν we partition around the two pivots using Yaroslavskiy-BentleyBloch (YBB) dual-pivot partitioning
+            #print("dual")
+            if small <= k <= large:
+              return sesquick(small,large,k)
+            elif k < small:
+              return sesquick(left, small - 1, k)
+            else:
+              return sesquick(large + 1, right, k)
 
 
             #print("small:",small)
@@ -90,13 +123,8 @@ def sesquickselect(arr, k, nu):
             #scanned_elements[0] += (large-small+1)  # Increment number of scanned elements for YBB
 
 
+        #print("end:",arr)
 
-        if small <= k <= large:
-            return arr[k]
-        elif k < small:
-            return sesquick(left, small - 1, k)
-        else:
-            return sesquick(large + 1, right, k)
 
     # If a non-existing rank is sought
     if k < 0 or k >= n:
@@ -107,8 +135,8 @@ def sesquickselect(arr, k, nu):
     return result, scanned_count
 
 # Example usage:
-arr = [3, 6, 2, 9, 1, 5, 7, 8, 4]
-k = 4
+arr = [3, 6, 2, 9, 1, 5, 7, 8, 4,10]
+k = 
 nu = 0.3
 
 result, scanned_count = sesquickselect(arr, k, nu)
