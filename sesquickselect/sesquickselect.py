@@ -1,19 +1,16 @@
 import random
 
-def dualpivot_partition(arr, low, high, left_pivot_index, right_pivot_index):
-    left_pivot = arr[left_pivot_index]
-    right_pivot = arr[right_pivot_index]
-
+def dualpivot_partition(arr, low, high, pivot1, pivot2):
     i = low
     left = low
     right = high
 
     while i <= right:
-        if arr[i] < left_pivot:
+        if arr[i] < pivot1:
             arr[i], arr[left] = arr[left], arr[i]
             left += 1
             i += 1
-        elif arr[i] > right_pivot:
+        elif arr[i] > pivot2:
             arr[i], arr[right] = arr[right], arr[i]
             right -= 1
         else:
@@ -21,11 +18,11 @@ def dualpivot_partition(arr, low, high, left_pivot_index, right_pivot_index):
 
     i = left
     while i < right:
-        if arr[i] == left_pivot:
+        if arr[i] == pivot1:
             arr[i], arr[left] = arr[left], arr[i]
             left += 1
             i += 1
-        elif arr[i] == right_pivot:
+        elif arr[i] == pivot2:
             arr[i], arr[right] = arr[right], arr[i]
             right -= 1
         else:
@@ -73,8 +70,6 @@ def sesquickselect(arr, k, nu):
         alpha = k / (right - left + 1)
 
         pivot1, pivot2 = min(pivot1, pivot2), max(pivot1, pivot2)
-        i = arr.index(pivot1)
-        j = arr.index(pivot2)
 
         #print("pivot1:",pivot1)
         #print("pivot2:",pivot2)
@@ -108,7 +103,7 @@ def sesquickselect(arr, k, nu):
               return sesquick(large + 1, right, k)
 
         else:
-            small, large = dualpivot_partition(arr, left, right, i,j) # If ν ≤ α ≤ 1 − ν we partition around the two pivots using Yaroslavskiy-BentleyBloch (YBB) dual-pivot partitioning
+            small, large = dualpivot_partition(arr, left, right,pivot1,pivot2) # If ν ≤ α ≤ 1 − ν we partition around the two pivots using Yaroslavskiy-BentleyBloch (YBB) dual-pivot partitioning
             #print("dual")
             if small <= k <= large:
               return sesquick(small,large,k)
@@ -136,7 +131,7 @@ def sesquickselect(arr, k, nu):
 
 # Example usage:
 arr = [3, 6, 2, 9, 1, 5, 7, 8, 4,10]
-k = 
+k = 1
 nu = 0.3
 
 result, scanned_count = sesquickselect(arr, k, nu)
