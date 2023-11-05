@@ -61,15 +61,13 @@ def sesquickselect(arr, k, nu):
 
         #print("begin:",arr)
         scanned_elements[0] += right - left + 1  # Increment number of scanned elements
-        if right - left > 0:
-          i = random.randint(left, right - 1)
-          j = random.randint(i + 1, right)
-          pivot1 = arr[i]
-          pivot2 = arr[j]
-        else:
-            pivot1 = arr[left]
-            pivot2 = arr[right]
-        
+        i = left + random.randint(0, right - left)  # length of the subarray - 1
+        pivot1 = arr[i]
+
+
+        j = left + random.randint(0, right - left)  # length of the subarray - 1
+        pivot2 = arr[j]
+
         #alpha = k / (right - left + 1)
         alpha = (k - left) / (right - left + 1)
         pivot1, pivot2 = min(pivot1, pivot2), max(pivot1, pivot2)
@@ -81,7 +79,7 @@ def sesquickselect(arr, k, nu):
 
         if alpha < nu:
             pivot = pivot1
-            
+
             small, large = partition(arr, left, right, pivot) # If α < ν we partition the array around the smallest of the two pivots
             #print("part1")
 
@@ -94,14 +92,14 @@ def sesquickselect(arr, k, nu):
 
         elif alpha > 1 - nu:
             pivot = pivot2
-            
+
             small, large = partition(arr, left, right, pivot) # If α > 1 − ν then we partition the array around the largest of the two pivots
             #print("part2")
 
             if k <= small:
               return sesquick(left, small, k)
             elif k >= large:
-              return sesquick(large, right, k)
+              return sesquick(large+1, right, k)
             else:
               return arr[k]
 
@@ -134,8 +132,8 @@ def sesquickselect(arr, k, nu):
 
 # Example usage:
 arr = [3, 6, 2, 9, 1, 5, 7, 8, 4,10]
-k = 3
-nu = 0.3
+k = 4
+nu = 0.4
 
 result, scanned_count = sesquickselect(arr, k, nu)
 print(f"The {k + 1}th smallest element is: {result}")
