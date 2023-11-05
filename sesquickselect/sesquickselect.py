@@ -98,12 +98,12 @@ def sesquickselect(arr, k, nu):
             small, large = partition(arr, left, right, pivot) # If α > 1 − ν then we partition the array around the largest of the two pivots
             #print("part2")
 
-            if small < k < large:
-                return arr[k]
-            elif k < small:
-               return sesquick(left, small-1, k)
-            else:
+            if k <= small:
+              return sesquick(left, small, k)
+            elif k >= large:
               return sesquick(large, right, k)
+            else:
+              return arr[k]
 
         else:
             small, large = dualpivot_partition(arr, left, right,pivot1,pivot2) # If ν ≤ α ≤ 1 − ν we partition around the two pivots using Yaroslavskiy-BentleyBloch (YBB) dual-pivot partitioning
