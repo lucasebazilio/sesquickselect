@@ -70,8 +70,8 @@ def sesquickselect(arr, k, nu):
             pivot1 = arr[left]
             pivot2 = arr[right]
         
-        alpha = k / (right - left + 1)
-
+        #alpha = k / (right - left + 1)
+        alpha = (k - left) / (right - left + 1)
         pivot1, pivot2 = min(pivot1, pivot2), max(pivot1, pivot2)
 
         #print("pivot1:",pivot1)
@@ -134,7 +134,7 @@ def sesquickselect(arr, k, nu):
 
 # Example usage:
 arr = [3, 6, 2, 9, 1, 5, 7, 8, 4,10]
-k = 4
+k = 3
 nu = 0.3
 
 result, scanned_count = sesquickselect(arr, k, nu)
