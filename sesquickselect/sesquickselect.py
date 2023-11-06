@@ -87,8 +87,8 @@ def sesquickselect(arr, k, nu):
             #print("part1")
         elif alpha > 1 - nu:
             pivot = pivot2
-            scanned_elements[0] += (right - left + 1) - 1 # Increment number of scanned elements with n-1
             small, large = partition(arr, left, right, pivot) # If α > 1 − ν then we partition the array around the largest of the two pivots
+            scanned_elements[0] += (right - left + 1) - 1 # Increment number of scanned elements with n-1
             #print("part2")
 
         else:
