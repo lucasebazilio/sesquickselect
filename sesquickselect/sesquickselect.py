@@ -28,7 +28,7 @@ def dualpivot_partition(arr, low, high, pivot1, pivot2):
             right -= 1
         else:
             i += 1
-    left_segment_size = left - low  # Size of the leftmost segment
+    left_segment_size = left - low + 1  # Size of the leftmost segment
 
     return left - 1, right + 1, left_segment_size
 
@@ -61,7 +61,6 @@ def sesquickselect(arr, k, nu):
             return arr[left]
 
         #print("begin:",arr)
-        scanned_elements[0] += (right - left + 1) - 1 # Increment number of scanned elements with n-1
         
         if right - left > 0:
           i = random.randint(left, right - 1)
@@ -84,16 +83,18 @@ def sesquickselect(arr, k, nu):
         if alpha < nu:
             pivot = pivot1
             small, large = partition(arr, left, right, pivot) # If α < ν we partition the array around the smallest of the two pivots
+            scanned_elements[0] += (right - left + 1) - 1 # Increment number of scanned elements with n-1
             #print("part1")
         elif alpha > 1 - nu:
             pivot = pivot2
+            scanned_elements[0] += (right - left + 1) - 1 # Increment number of scanned elements with n-1
             small, large = partition(arr, left, right, pivot) # If α > 1 − ν then we partition the array around the largest of the two pivots
             #print("part2")
 
         else:
             small, large, leftmost_size = dualpivot_partition(arr, left, right,pivot1,pivot2) # If ν ≤ α ≤ 1 − ν we partition around the two pivots using Yaroslavskiy-BentleyBloch (YBB) dual-pivot partitioning
             #print("dual")
-            scanned_elements[0] += leftmost_size - 1
+            scanned_elements[0] += (right - left + 1) -2 + leftmost_size # n - 2 + leftmost_size
             if small < k < large:
               return sesquick(small+1,large-1,k)
 
