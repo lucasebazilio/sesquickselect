@@ -28,8 +28,9 @@ def dualpivot_partition(arr, low, high, pivot1, pivot2):
             right -= 1
         else:
             i += 1
+    left_segment_size = left - low  # Size of the leftmost segment
 
-    return left - 1, right + 1
+    return left - 1, right + 1, left_segment_size
 
 
 def partition(arr, left, right, pivot):
@@ -60,7 +61,8 @@ def sesquickselect(arr, k, nu):
             return arr[left]
 
         #print("begin:",arr)
-        #scanned_elements[0] += right - left + 1  # Increment number of scanned elements
+        scanned_elements[0] += (right - left + 1) - 1 # Increment number of scanned elements with n-1
+        
         if right - left > 0:
           i = random.randint(left, right - 1)
           j = random.randint(i + 1, right)
@@ -82,18 +84,16 @@ def sesquickselect(arr, k, nu):
         if alpha < nu:
             pivot = pivot1
             small, large = partition(arr, left, right, pivot) # If α < ν we partition the array around the smallest of the two pivots
-            scanned_elements[0] += right - left + 1  # n - 1
             #print("part1")
         elif alpha > 1 - nu:
             pivot = pivot2
             small, large = partition(arr, left, right, pivot) # If α > 1 − ν then we partition the array around the largest of the two pivots
-            scanned_elements[0] += right - left + 1  # n - 1
             #print("part2")
 
         else:
-            small, large = dualpivot_partition(arr, left, right,pivot1,pivot2) # If ν ≤ α ≤ 1 − ν we partition around the two pivots using Yaroslavskiy-BentleyBloch (YBB) dual-pivot partitioning
+            small, large, leftmost_size = dualpivot_partition(arr, left, right,pivot1,pivot2) # If ν ≤ α ≤ 1 − ν we partition around the two pivots using Yaroslavskiy-BentleyBloch (YBB) dual-pivot partitioning
             #print("dual")
-            scanned_elements[0] += (right - left -1) + (left-small+1) # n - 2 + size of the leftmost part   (notice how (right-left) = n-1 so we subtract 1 more to get n-2)
+            scanned_elements[0] += leftmost_size - 1
             if small < k < large:
               return sesquick(small+1,large-1,k)
 
@@ -122,7 +122,7 @@ def sesquickselect(arr, k, nu):
 
 # Example usage:
 arr = [3, 6, 2, 9, 1, 5, 7, 8, 4,10]
-k = 7
+k = 3
 nu = 0.3
 
 result, scanned_count = sesquickselect(arr, k, nu)
