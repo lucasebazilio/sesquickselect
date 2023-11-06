@@ -28,7 +28,7 @@ def dualpivot_partition(arr, low, high, pivot1, pivot2):
             right -= 1
         else:
             i += 1
-    left_segment_size = left - low + 1  # Size of the leftmost segment
+    left_segment_size = left_segment_size = (left - low -1)  # Size of the leftmost segment
 
     return left - 1, right + 1, left_segment_size
 
