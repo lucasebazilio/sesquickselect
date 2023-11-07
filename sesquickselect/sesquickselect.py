@@ -114,9 +114,6 @@ def sesquickselect(arr, k, nu):
         else:
               return arr[k]
 
-            #print("small:",small)
-            #print("large:",large)
-
 
         print("end:",arr)
 
